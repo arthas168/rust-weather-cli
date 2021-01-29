@@ -1,6 +1,7 @@
 use exitfailure::ExitFailure;
 use reqwest::Url;
 use serde_derive::{Deserialize, Serialize};
+use std::env;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
@@ -77,8 +78,10 @@ struct Forecast {
 impl Forecast {
     async fn get(city: &str, country_code: &str) -> Result<Self, ExitFailure> {
         let url = format!(
-            "http://api.openweathermap.org/data/2.5/weather?q={},{}&appid=0edc85ecf8d7d004718dd10677b8b382",
-            city, country_code
+            "http://api.openweathermap.org/data/2.5/weather?q={},{}&appid={}",
+            city,
+            country_code,
+            env::var("API_TOKEN").unwrap(),
         );
         let url = Url::parse(&*url)?;
 
